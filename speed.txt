@@ -72,3 +72,22 @@ runtime: 797.058183670044 on 4 cores
 runtime: 849.9681017398834 on 4 cores
 
 FROM HERE EVERYTHING IS CALCULATED ON THE RIPPER
+Robot evaluation (generation 0) took: 160.93162608146667 seconds.
+Robot evaluation (generation 1) took: 143.27945041656494 seconds.
+Robot evaluation (generation 2) took: 86.30145454406738 seconds.
+Robot evaluation (generation 3) took: 91.77258729934692 seconds.
+Robot evaluation (generation 4) took: 79.05003213882446 seconds.
+Robot evaluation (generation 5) took: 106.15719628334045 seconds.
+Robot evaluation (generation 6) took: 107.6451370716095 seconds.
+Robot evaluation (generation 7) took: 139.9246804714203 seconds.
+Robot evaluation (generation 8) took: 161.09790897369385 seconds.
+Robot evaluation (generation 9) took: 205.476215839386 seconds.
+Robot evaluation (generation 10) took: 259.67175221443176 seconds.
+Robot evaluation (generation 11) took: 285.92605900764465 seconds.
+Robot evaluation (generation 12) took: 326.2791006565094 seconds.
+Robot evaluation (generation 13) took: 354.7001955509186 seconds.
+Robot evaluation (generation 14) took: 419.8871524333954 seconds.
+Robot evaluation (generation 15) took: 469.91292548179626 seconds.
+Robot evaluation (generation 16) took: 480.74894547462463 seconds.
+Robot evaluation (generation 17) took: 497.76081705093384 seconds.
+Robot evaluation (generation 18) took: 533.4714856147766 seconds.
