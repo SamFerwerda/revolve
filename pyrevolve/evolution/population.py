@@ -250,6 +250,10 @@ class Population:
 
         await asyncio.sleep(1)
 
+        """Lets export population here, so export is done while robots are being evaluated!"""
+        if gen_num > 0:
+            self.conf.experiment_management.export_snapshots(self.individuals, gen_num - 1)
+        
         for i, future in enumerate(robot_futures):
             individual = new_individuals[i]
             logger.info(f'Evaluation of Individual {individual.phenotype.id}')

@@ -72,3 +72,7 @@ runtime: 797.058183670044 on 4 cores
 runtime: 849.9681017398834 on 4 cores
 
 FROM HERE EVERYTHING IS CALCULATED ON THE RIPPER
+Robot evaluation (generation 0) took: 72.61257576942444 seconds.
+Robot evaluation (generation 1) took: 49.82534456253052 seconds.
+Robot evaluation (generation 2) took: 67.0785129070282 seconds.
+NEW EXPERIMENT: Initialization took 111.3606505393982 seconds. 
