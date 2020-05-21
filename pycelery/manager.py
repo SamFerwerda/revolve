@@ -115,7 +115,6 @@ async def run():
         experiment_management.create_exp_folders()
 
         await population.init_pop()
-        experiment_management.export_snapshots(population.individuals, gen_num)
 
     end1 = time.time()
     f=open("speed.txt", "a")
@@ -127,19 +126,8 @@ async def run():
 
         population = await population.next_gen(gen_num)
 
-        # reset gazebo and celery if something went wrong or every 10 generations
-        # if population.conf.celery_reboot:
-        #    await celerycontroller.reset_celery()
-        #    population.conf.celery_reboot = False}
-
-        b1 = time.time()
-        experiment_management.export_snapshots(population.individuals, gen_num)
-        b2 = time.time()
-
-        export_time.append(b2-b1)
-        f = open("speed.txt", "a")
-        f.write(f"Export times: {export_time} \n")
-        f.close()
+    # One final export because last generation is not yet exported.
+    experiment_management.export_snapshots(population.individuals, gen_num)
 
     await celerycontroller.shutdown()
 

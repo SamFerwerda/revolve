@@ -63,9 +63,9 @@ runtime: 755.6062722206116 on 4 cores
 runtime: 712.8734681606293 on 4 cores
 runtime: 768.489245891571 on 4 cores
 runtime: 753.899983882904 on 4 cores
-runtime: 804.5930087566376 on 4 cores
+runtime: 804.5930087566376 on 4 core
 runtime: 883.2536962032318 on 4 cores
-runtime: 730.33083152771 on 4 cores
+runtime: 730.33083152771 on 4 core
 runtime: 948.1255295276642 on 4 cores
 runtime: 831.4269962310791 on 4 cores
 runtime: 797.058183670044 on 4 cores
@@ -91,3 +91,8 @@ Robot evaluation (generation 15) took: 469.91292548179626 seconds.
 Robot evaluation (generation 16) took: 480.74894547462463 seconds.
 Robot evaluation (generation 17) took: 497.76081705093384 seconds.
 Robot evaluation (generation 18) took: 533.4714856147766 seconds.
+=======
+Robot evaluation (generation 0) took: 72.61257576942444 seconds.
+Robot evaluation (generation 1) took: 49.82534456253052 seconds.
+Robot evaluation (generation 2) took: 67.0785129070282 seconds.
+NEW EXPERIMENT: Initialization took 111.3606505393982 seconds. 
