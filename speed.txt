@@ -148,3 +148,7 @@ Robot evaluation (generation 48) took: 44.98705244064331 seconds.
 Robot evaluation (generation 49) took: 48.3246910572052 seconds.
 NEW EXPERIMENT: Initialization took 141.194486618042 seconds. 
 runtime: 3278.1572058200836 on 24 cores. Gen: 50, Population: 100, Offspring: 50
+Robot evaluation (generation 0) took: 75.28247261047363 seconds.
+Robot evaluation (generation 1) took: 42.40683126449585 seconds.
+NEW EXPERIMENT: Initialization took 116.35578894615173 seconds. 
+runtime: 173.6507887840271 on 8 cores. Gen: 2, Population: 100, Offspring: 50

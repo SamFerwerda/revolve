@@ -34,7 +34,7 @@ async def run():
     await asyncio.sleep(settings.n_cores) # Celery needs time
 
     # experiment params #
-    num_generations = 50
+    num_generations = 2
     population_size = 100
     offspring_size = 50
 
@@ -75,7 +75,7 @@ async def run():
         population_size=population_size,
         genotype_constructor=random_initialization,
         genotype_conf=genotype_conf,
-        fitness_function='displacement_velocity', # Celery will evaluate the string into a function
+        fitness_function='rotation', # Celery will evaluate the string into a function
         mutation_operator=standard_mutation,
         mutation_conf=mutation_conf,
         crossover_operator=standard_crossover,
