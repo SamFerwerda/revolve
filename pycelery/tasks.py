@@ -194,6 +194,8 @@ async def _restart_simulator(settings, connection_, supervisor_, simulator_type)
 
 @app.task(soft_time_limit=150)
 async def evaluate_robot(yaml_object, fitnessName, settingsDir):
+    """Takes a robot, simulates it and evaluates it with the fitness given.
+    Returns: Fitness, Movements, Restart_variable"""
     global fitness_function
     global connection
     global analyzer_connection
@@ -237,11 +239,11 @@ async def evaluate_robot(yaml_object, fitnessName, settingsDir):
                 await _restart_simulator(settings, analyzer_connection, analyzer_supervisor, "analyzer")
                 busy = False
 
-                return (None, None)
+                return (None, None, False)
 
             if collisions > 0:
                 logger.info(f"discarding robot {robot.id} because there are {collisions} self collisions")
-                return (None, None)
+                return (None, None, False)
 
         # Convert to sdf for cpp (nice_format:None)
         SDF = revolve_bot_to_sdf(robot, Vector3(0, 0, settings.z_start), None)
@@ -254,20 +256,20 @@ async def evaluate_robot(yaml_object, fitnessName, settingsDir):
             robot_data = await asyncio.wait_for(robot_manager.get(timeout=120), timeout=120)
         except:
             logger.info(f"WARNING C 2: Worker could not retrieve robot from gazebo instance. Instance might have crashed. Restarting is recommended if this happens more than once. Robot_id: {robot.id}")
-            return (None, None)
-            
+            return (None, None, True)
+
         # converting celery data to robot_manager and calculate fitness and measurements.
         robot_manager = msg_to_robotmanager(robot_data[0], connection, settings, robot, Vector3(0, 0, settings.z_start), max_age)
         robot_fitness = fitness_function(robot_manager, robot)
         BehaviouralMeasurementsDic = measurements_to_dict(robot_manager, robot)
 
-        return (robot_fitness, BehaviouralMeasurementsDic)
+        return (robot_fitness, BehaviouralMeasurementsDic, False)
 
     except SoftTimeLimitExceeded:
         logger.info(f"WARNING C 4: Celery SoftTimeLimitExceeded Trown with robot: {robot.id}. Returning None value.")
         # Currently we cannot restart simulators if a robot isnt returned. Because we dont know what
         # simulator is processing our robot. Therefore best we can do here is return None, None
-        return (None, None)
+        return (None, None, False)
 
 @app.task
 async def shutdown_gazebo():
@@ -276,15 +278,23 @@ async def shutdown_gazebo():
     """
 
     global simulator_supervisor
+    global analyzer_supervisor
+    global analyzer_connection
     global connection
 
     try:
         await connection.disconnect()
         await asyncio.wait_for(simulator_supervisor.stop(), timeout=10)
     except:
-        logger.info("TimeoutError: timeout error when closing gazebo instance.")
-    finally:
-        return True
+        logger.info("TimeoutError: timeout error when closing simulator.")
+
+    try:
+        await analyzer_connection.disconnect()
+        await asyncio.wait_for(analyzer_supervisor.stop(), timeout=10)
+    except:
+        logger.info("TimeoutError: Timeout when closing analyzer.")
+
+    return True
 
 
 @app.task

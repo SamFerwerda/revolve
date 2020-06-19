@@ -47,16 +47,25 @@ class CeleryController:
         logger.info("Starting a worker at the background using " + str(self.settings.n_cores) + " cores. ")
         self.celery_process = subprocess.Popen(f"celery multi start {worker_string} -Q robots{self.settings.port_start} -A pycelery -P celery_pool_asyncio:TaskPool -l info -c 1", shell=True)
 
-    async def reset_connections(self):
-        logger.info("Resetting connection on every worker.")
+    async def check_connections(self, reboot):
+        """Reboots all connections, simulator or analyzer on all workers. Only happens
+        if an celery notices a gazebo instance to timeout! """
+        if reboot:
+            logger.info("Resetting gazebo connection on every worker.")
 
-        futures = []
-        for i in range(self.settings.n_cores):
-            future = await reset.delay()
-            futures.append(future)
+            shutdowns = []
+            for i in range(self.settings.n_cores):
+                sd = await shutdown_gazebo.delay()
+                shutdowns.append(sd)
 
-        for i in futures:
-            await i.get()
+            for i in range(self.settings.n_cores):
+                result = await shutdowns[i].get()
+
+            await asyncio.sleep(5)
+
+            await start_gazebo_instances()
+
+            await asyncio.sleep(5)
 
     async def reset_celery(self):
         logger.info("Resetting every celery worker and gazebo instance. This will take approximately 25 seconds...")
@@ -64,7 +73,7 @@ class CeleryController:
         await self.shutdown()
 
         #celery need time to start
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
 
         self.start_workers()
 

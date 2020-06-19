@@ -123,10 +123,8 @@ async def run():
 
         population = await population.next_gen(gen_num)
 
-        # reset gazebo and celery if something went wrong or every 10 generations
-        # if population.conf.celery_reboot:
-        #    await celerycontroller.reset_celery()
-        #    population.conf.celery_reboot = False}
+        # This checks if gazebo instances need to be restarted or not.
+        celerycontroller.check_connections(population_conf.celery_reboot)
 
     end = time.time()
     f = open("speed.txt", "a")
