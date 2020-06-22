@@ -26,6 +26,10 @@ class SimulatorQueue:
         self._workers = []
         self._enable_play_pause = True
 
+        # for speed measurements - Sam
+        self.simulation_times = []
+        self.robot_size = []
+
     def _simulator_supervisor(self, simulator_name_postfix):
         return DynamicSimSupervisor(
             world_file=self._settings.world,
@@ -115,6 +119,11 @@ class SimulatorQueue:
             return False
 
         elapsed = time.time()-start
+
+        """Checking simulation speed vs robot size"""
+        self.simulation_times.append(elapsed)
+        self.robot_size.append(robot.phenotype.size())
+
         logger.info(f"time taken to do a simulation {elapsed}")
 
         robot.failed_eval_attempt_count = 0
@@ -188,4 +197,3 @@ class SimulatorQueue:
 
     async def _joint(self):
         await self._robot_queue.join()
-
