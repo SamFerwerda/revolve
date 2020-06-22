@@ -113,7 +113,7 @@ async def run():
             logger.info('Recovered unfinished offspring '+str(gen_num))
 
             if gen_num == 0:
-                await population.init_pop(individuals)
+                await population.initialize(individuals)
             else:
                 population = await population.next_gen(gen_num, individuals)
 

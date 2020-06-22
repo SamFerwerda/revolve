@@ -29,7 +29,8 @@ class PopulationConfig:
                  evaluation_time: float,
                  experiment_name: str,
                  experiment_management,
-                 offspring_size: Optional[int] = None):
+                 offspring_size: Optional[int] = None,
+                 celery: Optional[bool]=False):
         """
         Creates a PopulationConfig object that sets the particular configuration for the population
 
@@ -52,6 +53,9 @@ class PopulationConfig:
         :param experiment_name: name for the folder of the current experiment
         :param experiment_management: object with methods for managing the current experiment
         :param offspring_size (optional): size of offspring (for steady state)
+        :param celery (optional): Whether or not celery is used
+        :param celery_reboot (optional):
+
         """
         self.population_size = population_size
         self.genotype_constructor = genotype_constructor
@@ -69,3 +73,5 @@ class PopulationConfig:
         self.experiment_name = experiment_name
         self.experiment_management = experiment_management
         self.offspring_size = offspring_size
+        self.celery = celery
+        self.celery_reboot = False

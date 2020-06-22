@@ -188,14 +188,31 @@ class Population:
         robot_futures = []
         for individual in new_individuals:
             logger.info(f'Evaluating individual (gen {gen_num}) {individual.id} ...')
-            robot_futures.append(asyncio.ensure_future(self.evaluate_single_robot(individual)))
+
+            if self.config.celery: # ADDED THIS FOR CELERY -Sam
+                robot_futures.append(await self.evaluate_single_robot(individual))
+            else:
+                robot_futures.append(asyncio.ensure_future(self.evaluate_single_robot(individual)))
+
+        """Do export here so celery workers can work parallel to the export!"""
+        if gen_num > 0 and self.config.celery:
+            self.conf.experiment_management.export_snapshots(self.individuals, gen_num-1)
 
         await asyncio.sleep(1)
 
         for i, future in enumerate(robot_futures):
             individual = new_individuals[i]
             logger.info(f'Evaluation of Individual {individual.phenotype.id}')
-            individual.fitness, individual.phenotype._behavioural_measurements = await future
+            if self.config.celery: # ADDED THIS FOR CELERY -Sam
+                try:
+                    individual.fitness, measurements, self.config.celery_reboot = await asyncio.wait_for(future.get(timeout=200), timeout=200) # This only triggers if a celery instance is stuck.
+                    individual.phenotype._behavioural_measurements = dic_to_measurements(measurements)
+                except TimeoutError:
+                    logger.info(f"Individual's get request timed out. Either cores are saturated or celery has an error. Consider restarting.")
+                    self.conf.celery_reboot = True
+                    individual.fitness, individual.phenotype._behavioural_measurements = None, None
+            else:
+                individual.fitness, individual.phenotype._behavioural_measurements = await future
 
             if individual.phenotype._behavioural_measurements is None:
                 assert (individual.fitness is None)
