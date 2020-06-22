@@ -35,7 +35,7 @@ async def run():
     await asyncio.sleep(max(settings.n_cores,10)) # Celery needs time
 
     # experiment params #
-    num_generations = 50
+    num_generations = 200
     population_size = 100
     offspring_size = 50
 
@@ -49,7 +49,7 @@ async def run():
     )
 
     crossover_conf = CrossoverConfig(
-        crossover_prob=0.8,
+        crossover_prob=0.7,
     )
     # experiment params #
 
@@ -124,7 +124,7 @@ async def run():
         population = await population.next_gen(gen_num)
 
         # This checks if gazebo instances need to be restarted or not.
-        celerycontroller.check_connections(population_conf.celery_reboot)
+        await celerycontroller.check_connections(population_conf.celery_reboot)
 
     end = time.time()
     f = open("speed.txt", "a")
