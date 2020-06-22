@@ -2,8 +2,9 @@
 from pyrevolve import parser
 from pyrevolve.evolution import fitness
 from pyrevolve.evolution.selection import multiple_selection, tournament_selection
-from pyrevolve.evolution.population import Population, PopulationConfig
-from pyrevolve.evolution.pop_management.steady_state import steady_state_population_management
+from pyrevolve.evolution.population.population import Population
+from pyrevolve.evolution.population.population_config import PopulationConfig
+from pyrevolve.evolution.population.population_management import steady_state_population_management
 from pyrevolve.experiment_management import ExperimentManagement
 from pyrevolve.genotype.lsystem_neat.crossover import CrossoverConfig as lCrossoverConfig
 from pyrevolve.genotype.lsystem_neat.crossover import standard_crossover as lcrossover
@@ -25,12 +26,16 @@ async def run():
     """
 
     # experiment params #
-    num_generations = 100
+    num_generations = 200
     population_size = 100
     offspring_size = 50
 
     body_conf = PlasticodingConfig(
         max_structural_modules=20,
+        allow_vertical_brick=False,
+        use_movement_commands=False,
+        use_rotation_commands=False,
+        use_movement_stack=True,
     )
     brain_conf = NeatBrainGenomeConfig()
     lsystem_conf = LSystemCPGHyperNEATGenotypeConfig(body_conf, brain_conf)
@@ -46,7 +51,7 @@ async def run():
     )
 
     crossover_conf = lCrossoverConfig(
-        crossover_prob=0.8,
+        crossover_prob=0.0,
     )
     # experiment params #
 
