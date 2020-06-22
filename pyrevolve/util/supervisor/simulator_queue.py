@@ -25,10 +25,6 @@ class SimulatorQueue:
         self._free_simulator = [True for _ in range(n_cores)]
         self._workers = []
 
-        # for speed measurements - Sam
-        self.simulation_times = []
-        self.robot_size = []
-
     def _simulator_supervisor(self, simulator_name_postfix):
         return DynamicSimSupervisor(
             world_file=self._settings.world,
@@ -118,10 +114,6 @@ class SimulatorQueue:
             return False
 
         elapsed = time.time()-start
-
-        """Checking simulation speed vs robot size"""
-        self.simulation_times.append(elapsed)
-        self.robot_size.append(robot.phenotype.size())
 
         logger.info(f"time taken to do a simulation {elapsed}")
 
