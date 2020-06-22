@@ -144,8 +144,8 @@ class DynamicSimSupervisor(object):
         self._logger.info("Created Supervisor with:"
                           f"\n\t- simulator command: {simulator_cmd} {simulator_args}"
                           f"\n\t- world file: {world_file}"
-                          f"\n\t- GAZEBO_PLUGIN_PATH: {plugins_dir_path}"
-                          f"\n\t- GAZEBO_MODEL_PATH: {models_dir_path}")
+                          f"\n\t- GAZEBO_PLUGIN_PATH={plugins_dir_path}"
+                          f"\n\t- GAZEBO_MODEL_PATH={models_dir_path}")
 
     async def launch_simulator(self, address='localhost', port=11345):
         """
@@ -251,7 +251,8 @@ class DynamicSimSupervisor(object):
         gazebo_libraries_path = os.path.dirname(gazebo_libraries_path)
         for lib_f in ['lib', 'lib64']:
             _gazebo_libraries_path = os.path.join(gazebo_libraries_path, '..', lib_f)
-            if os.path.isfile(os.path.join(_gazebo_libraries_path, 'libgazebo_common.so')):
+            lib_postfix = 'dylib' if platform.system() == 'Darwin' else 'so'
+            if os.path.isfile(os.path.join(_gazebo_libraries_path, f'libgazebo_common.{lib_postfix}')):
                 gazebo_libraries_path = _gazebo_libraries_path
                 break
 
