@@ -63,7 +63,7 @@ class CeleryController:
 
             await asyncio.sleep(5)
 
-            await start_gazebo_instances()
+            await self.start_gazebo_instances()
 
             await asyncio.sleep(5)
 
